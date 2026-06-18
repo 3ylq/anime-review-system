@@ -59,8 +59,6 @@ public class ForumService {
     public ForumPost getPostById(Long id) {
         ForumPost post = forumPostRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("帖子不存在"));
-        
-        // 增加浏览次数
         post.setViewCount(post.getViewCount() + 1);
         return forumPostRepository.save(post);
     }

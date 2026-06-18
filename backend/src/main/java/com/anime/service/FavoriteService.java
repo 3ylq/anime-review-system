@@ -40,8 +40,6 @@ public class FavoriteService {
                 .build();
 
         favoriteRepository.save(favorite);
-
-        // 更新动漫收藏数
         anime.setFavoriteCount(anime.getFavoriteCount() + 1);
         animeRepository.save(anime);
     }
@@ -52,8 +50,6 @@ public class FavoriteService {
         }
 
         favoriteRepository.deleteByUserIdAndAnimeId(userId, animeId);
-
-        // 更新动漫收藏数
         Anime anime = animeRepository.findById(animeId)
                 .orElseThrow(() -> new RuntimeException("动漫不存在"));
         anime.setFavoriteCount(Math.max(0, anime.getFavoriteCount() - 1));

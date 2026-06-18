@@ -48,7 +48,6 @@ public class AnimeService {
         Anime anime = animeRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("动漫不存在"));
         
-        // 增加浏览次数
         anime.setViewCount(anime.getViewCount() + 1);
         return animeRepository.save(anime);
     }

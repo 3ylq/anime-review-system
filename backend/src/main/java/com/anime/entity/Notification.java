@@ -24,14 +24,14 @@ public class Notification {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private String type; // comment_reply/post_reply/like/follow
+    private String type;
 
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private Long relatedId; // 相关内容ID
+    private Long relatedId;
 
-    private String relatedType; // review/post/user
+    private String relatedType;
 
     private Boolean isRead = false;
 

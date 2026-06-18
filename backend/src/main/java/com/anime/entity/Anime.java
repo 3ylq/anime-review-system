@@ -46,7 +46,7 @@ public class Anime {
     @Column(name = "end_date")
     private String endDate;
 
-    private String status; // 更新中/已完结/待上线
+    private String status;
 
     @Column(columnDefinition = "TEXT")
     private String characters;

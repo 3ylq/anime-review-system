@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,8 +42,6 @@ public class ReviewService {
                 .build();
 
         review = reviewRepository.save(review);
-
-        // 更新动漫评分
         updateAnimeRating(animeId);
 
         return review;
@@ -79,8 +76,6 @@ public class ReviewService {
         
         Long animeId = review.getAnime().getId();
         reviewRepository.deleteById(reviewId);
-        
-        // 更新动漫评分
         updateAnimeRating(animeId);
     }
 
@@ -94,20 +89,20 @@ public class ReviewService {
     private void updateAnimeRating(Long animeId) {
         Anime anime = animeRepository.findById(animeId)
                 .orElseThrow(() -> new RuntimeException("动漫不存在"));
-
-        List<Review> reviews = anime.getId() != null ? reviewRepository.findByAnimeId(animeId, null).getContent() : List.of();
         
-        if (reviews.isEmpty()) {
+        Page<Review> reviewPage = reviewRepository.findByAnimeId(animeId, null);
+        if (reviewPage.isEmpty()) {
             anime.setRating(0.0);
+            anime.setReviewCount(0);
         } else {
-            double averageRating = reviews.stream()
+            double averageRating = reviewPage.getContent().stream()
                     .mapToDouble(Review::getRating)
                     .average()
                     .orElse(0.0);
-            anime.setRating(Math.round(averageRating * 10.0) / 10.0); // 保留一位小数
+            anime.setRating(Math.round(averageRating * 10.0) / 10.0);
+            anime.setReviewCount(reviewPage.getContent().size());
         }
-
-        anime.setReviewCount(reviews.size());
+        
         animeRepository.save(anime);
     }
 }

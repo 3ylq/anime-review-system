@@ -30,7 +30,7 @@ public class ForumPost {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private String category; // 讨论/新闻/资源
+    private String category;
 
     private Integer viewCount = 0;
 
